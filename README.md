@@ -1,4 +1,4 @@
-# A assiste Flet app
+# An AI Flet app
 
 An example of a minimal Flet app.
 
