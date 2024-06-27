@@ -1,9 +1,9 @@
 import flet as ft
 from flet_core import View
 import enchant
-import openai
-openai.api_key = "sk-proj-LiBI8BLzGqX0eBno4gfaT3BlbkFJu2qD3r1M2KB0Rmc1MTTe"
 
+# Declare tab_number as a global variable
+tab_number = 1
 
 def main(page: ft.Page):
     page.title = "Assiste"
@@ -16,19 +16,57 @@ def main(page: ft.Page):
     def open_drawer(_):
         page.update()
 
-    def chat_with_gpt(prompt):
-        response = openai.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-                {"role": "user", "content": prompt},
-            ],
-        )
-        return response.choices[0].message.content
+    def tab_1operator(e: ft.RouteChangeEvent):
+        page.route = '/assiste_ai/tab_1'
+        page.go(page.route)
+        page.update()
 
-    def open_assiste_ai(_):
+    def tab_operator(tab_no):
+        page.route = f'/assiste_ai/{tab_no}'
+        page.go(page.route)
+        page.update()
+
+    tab_row = ft.Row(
+        width=page.window_width,
+        scroll=ft.ScrollMode.ADAPTIVE,
+        controls=[ft.Card(
+            content=ft.Container(
+                content=ft.ElevatedButton(
+                    content=ft.Text(value="Tab 1", 
+                                    size=15, 
+                                    color=ft.colors.TEAL, 
+                                    font_family="Trebuchet MS",
+                                    selectable=True, 
+                                    weight=ft.FontWeight.W_100
+                    ),
+                    on_click = tab_1operator,
+                )
+            )
+        )]
+    )
+
+    def add_tab(_):
+        global tab_number   
+        tab_number += 1        
+        tab_row.controls.append(
+            ft.Card(
+                content=ft.Container(
+                    content=ft.ElevatedButton(
+                        content=ft.Text(value=f"Tab {tab_number}", 
+                                    size=13, 
+                                    color=ft.colors.TEAL, 
+                                    font_family="Trebuchet MS",
+                                    selectable=True, 
+                                    weight=ft.FontWeight.W_100
+                        ),
+                        on_click = tab_operator,
+                    )
+                )
+            )
+        )
         page.views.append(
             View(
-                route='/assiste_ai',
+                route=f'/assiste_ai/tab_{tab_number}',
                 controls=[
                     ft.Column(
                         controls=[
@@ -50,13 +88,14 @@ def main(page: ft.Page):
                                     ft.Row(
                                         alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
                                         controls=[
-                                            ft.IconButton(icon=ft.icons.ADD_ROUNDED, on_click=open_drawer),
+                                            ft.IconButton(icon=ft.icons.ADD_ROUNDED, on_click=add_tab),
                                             ft.IconButton(icon=ft.icons.MORE_VERT, on_click=open_drawer),
                                         ]
                                     ),
                                 ]
                             ),
                             ft.Divider(),
+                            tab_row,
                             ft.Column(
                                 height=page.window_height - 143,
                                 scroll=ft.ScrollMode.ADAPTIVE,
@@ -72,7 +111,7 @@ def main(page: ft.Page):
                                         controls=[
                                             chat_box,
                                             ft.IconButton(autofocus=True, icon=ft.icons.SEND_ROUNDED, on_click=send,
-                                                          bgcolor=ft.colors.TEAL_700, disabled_color=ft.colors.TEAL_500)
+                                                        bgcolor=ft.colors.TEAL_700, disabled_color=ft.colors.TEAL_500)
                                         ]
                                     )
                                 ]
@@ -83,29 +122,99 @@ def main(page: ft.Page):
             )
         )
         page.update()
-    another = ft.Column(
-                run_spacing=10,
-                tight=False,
-                controls=[
-                    ft.ListTile(
-                        icon_color=ft.colors.TEAL_700,
-                        leading=ft.Icon(ft.icons.WECHAT),
-                        title=ft.Text("Assiste AI", weight=ft.FontWeight.BOLD),
-                    ),
-                    ft.Row(
-                        wrap=True,
-                        controls=[
-                            ft.Column(
-                                spacing=10,
-                                controls=[
-                                    ft.Text(value=chat_with_gpt(chat_with_gpt("Hello")), font_family="Trebuchet MS",
-                                            size=14, selectable=True,)
-                                ]
-                            )
-                        ]
-                    )
-                ]
+
+    try:
+        from meta_ai_api import MetaAI
+        ai = MetaAI()
+        def open_assiste_ai(_):
+            page.views.append(
+                View(
+                    route='/assiste_ai/tab_1',
+                    controls=[
+                        ft.Column(
+                            controls=[
+                                ft.Row(
+                                    alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                    controls=[
+                                        ft.Row(
+                                            controls=[
+                                                ft.IconButton(
+                                                    icon=ft.icons.ARROW_BACK_ROUNDED,
+                                                    on_click=view_pop
+                                                ),
+                                                ft.Text(value="Assiste AI", size=23, color=ft.colors.TEAL,
+                                                        font_family="Trebuchet MS",
+                                                        selectable=True, weight=ft.FontWeight.BOLD
+                                                )
+                                            ]
+                                        ),
+                                        ft.Row(
+                                            alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                                            controls=[
+                                                ft.IconButton(icon=ft.icons.ADD_ROUNDED, on_click=add_tab),
+                                                ft.IconButton(icon=ft.icons.MORE_VERT, on_click=open_drawer),
+                                            ]
+                                        ),
+                                    ]
+                                ),
+                                ft.Divider(),
+                                tab_row,
+                                ft.Column(
+                                    height=page.window_height - 143,
+                                    scroll=ft.ScrollMode.ADAPTIVE,
+                                    controls=[
+                                        ft.Card(
+                                            content=ft.Container(
+                                                content=another
+                                            )
+                                        ),
+                                        ft.Row(
+                                            alignment=ft.MainAxisAlignment.END,
+                                            spacing=5,
+                                            controls=[
+                                                chat_box,
+                                                ft.IconButton(autofocus=True, icon=ft.icons.SEND_ROUNDED, on_click=send,
+                                                            bgcolor=ft.colors.TEAL_700, disabled_color=ft.colors.TEAL_500)
+                                            ]
+                                        )
+                                    ]
+                                )
+                            ]
+                        )
+                    ]
+                )
             )
+            page.update()
+
+        entry_message = ai.prompt(message="Hello")
+        message1 = entry_message["message"]
+        if "Meta" in message1:
+            message1.replace("Meta", "Assiste")
+        another = ft.Column(
+                    run_spacing=10,
+                    tight=False,
+                    controls=[
+                        ft.ListTile(
+                            icon_color=ft.colors.TEAL_700,
+                            leading=ft.Icon(ft.icons.WECHAT),
+                            title=ft.Text("Assiste AI", weight=ft.FontWeight.BOLD),
+                        ),
+                        ft.Row(
+                            wrap=True,
+                            controls=[
+                                ft.Column(
+                                    spacing=10,
+                                    controls=[
+                                        ft.Text(value=message1, font_family="Trebuchet MS",
+                                                size=14, selectable=True,)
+                                    ]
+                                )
+                            ]
+                        )
+                    ]
+                )
+    except:
+        pass
 
     #d = enchant.Dict("en_US")
     def on_chatbox_change(_):
@@ -145,7 +254,9 @@ def main(page: ft.Page):
             )
             chat_box.value = ""
             page.update()
-            response = chat_with_gpt(aie)
+            response = aie
+            entry_message2 = ai.prompt(message=response)
+            message2 = entry_message2["message"]
             page.update()
             another.controls.append(
                 ft.Divider(thickness=1, height=2, color=ft.colors.TEAL_700)
@@ -156,7 +267,6 @@ def main(page: ft.Page):
                         ft.ListTile(
                             icon_color=ft.colors.TEAL_700,
                             leading=ft.Icon(ft.icons.WECHAT),
-                            # leading_and_trailing_text_style=ft.TextStyle,
                             title=ft.Text("Assiste AI", weight=ft.FontWeight.BOLD),
                         ),
                         ft.Row(
@@ -165,7 +275,7 @@ def main(page: ft.Page):
                                 ft.Column(
                                     spacing=10,
                                     controls=[
-                                        ft.Text(value=chat_with_gpt(response), font_family="Trebuchet MS",
+                                        ft.Text(value=message2, font_family="Trebuchet MS",
                                                 size=14, selectable=True,)
                                     ]
                                 )
@@ -188,8 +298,14 @@ def main(page: ft.Page):
                 controls=[pg]
             )
         )
-        if page.route == '/assiste_ai':
-            open_assiste_ai()
+        if page.route == '/assiste_ai/tab_1':
+            open_assiste_ai("_")
+        if page.route == '/assiste_ai/tab_2':
+            add_tab("-")
+        if page.route == '/assiste_ai/tab_3':
+            page.add(ft.AlertDialog(
+                title="Premium"
+            ))
         page.update()
 
     def view_pop(e: ft.ViewPopEvent):
@@ -210,14 +326,34 @@ def main(page: ft.Page):
                 ]
             )
     heading_text = ft.Text(value="Welcome to Assiste", size=23, color=ft.colors.TEAL, font_family="Trebuchet MS",
-                      selectable=True, weight=ft.FontWeight.BOLD)
+                    selectable=True, weight=ft.FontWeight.BOLD)
     heading = ft.Row(
-                  alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-                  controls=[
-                      heading_text,
-                      icons
-                  ]
+                alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
+                controls=[
+                    heading_text,
+                    icons
+                ]
     )
+
+    try:
+        assiste_ai_launcher = ft.Row(
+            controls=[ft.TextButton("Open", on_click=open_assiste_ai)],
+            alignment=ft.MainAxisAlignment.END,
+        )
+    except:
+        assiste_ai_launcher = ft.Row(
+            wrap=True,
+            controls=[
+                ft.Column(
+                    spacing=50,
+                    controls=[
+                        ft.Text(value= "Assiste AI wasn't able to load, because there's no internet, \n Please, Check your Internet Connection and Try again later, \n  Thank you.", 
+                                size=13, selectable=True, opacity=3,)
+                    ]
+                )
+            ]
+        )
+        pass
 
     body = ft.Column(
                 height=page.window_height - 143,
@@ -235,10 +371,7 @@ def main(page: ft.Page):
                                             "An AI Interactive ChatBot that can be informative, and good in answering questions."
                                         ),
                                     ),
-                                    ft.Row(
-                                        controls=[ft.TextButton("Open", on_click=open_assiste_ai)],
-                                        alignment=ft.MainAxisAlignment.END,
-                                    ),
+                                    assiste_ai_launcher
                                 ]
                             ),
                             padding=10,
@@ -255,7 +388,7 @@ def main(page: ft.Page):
                                     ),
                                     ft.Row(
                                         controls=[ft.TextButton("Calculator"), ft.TextButton("Calendar"),
-                                                  ft.TextButton("Notepad")],
+                                                ft.TextButton("Notepad")],
                                         alignment=ft.MainAxisAlignment.SPACE_EVENLY,
                                     ),
                                 ]
@@ -296,7 +429,7 @@ def main(page: ft.Page):
             ]
         )
     if page.route == '/':
-        route_change('hello')
+        route_change("e")
     page.on_route_change = route_change
     page.on_view_pop = view_pop
     page.route = '/'
