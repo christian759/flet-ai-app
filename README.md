@@ -6,16 +6,24 @@ This advanced chat application is designed to offer a modern, engaging, and high
 To get started, follow these instructions: 
 
 Clone the repository to your local machine:
-```bash git clone https://github.com/yourusername/assiste-ai.git ```
+```bash 
+git clone https://github.com/yourusername/assiste-ai.git
+ ```
 
 Navigate to the project directory: 
-```bash cd assiste-ai ``` 
+```bash
+cd assiste-ai
+``` 
 
 Install the required Python packages: 
-```bash pip install flet ``` 
+```bash 
+pip install flet
+ ``` 
 
 Run the application: 
-```bash python main.py ``` 
+```bash 
+python main.py
+ ``` 
 
 ### Features ✨ 
 
