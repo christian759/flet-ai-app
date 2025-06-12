@@ -1,23 +1,23 @@
-# Assiste AI 🌟
+# Flet AI 🌟
 
-Welcome to **Assiste AI**! 🎉 
-This advanced chat application is designed to offer a modern, engaging, and highly customizable user experience. Powered by the Flet framework, Assiste AI integrates dynamic tab management with a sophisticated AI chatbot, delivering a seamless and intuitive platform for managing tasks and engaging in real-time conversations.
+Welcome to **Flet AI**! 🎉 
+This advanced chat application is designed to offer a modern, engaging, and highly customizable user experience. Powered by the Flet framework, Flet AI integrates dynamic tab management with a sophisticated AI chatbot, delivering a seamless and intuitive platform for managing tasks and engaging in real-time conversations.
 
 To get started, follow these instructions: 
 
 Clone the repository to your local machine:
 ```bash 
-git clone https://github.com/yourusername/assiste-ai.git
+git clone https://github.com/christian759/flet-ai-app.git
  ```
 
 Navigate to the project directory: 
 ```bash
-cd assiste-ai
+cd flet-ai-app
 ``` 
 
 Install the required Python packages: 
 ```bash 
-pip install flet
+pip install -r requirements.txt
  ``` 
 
 Run the application: 
@@ -33,7 +33,7 @@ python main.py
   
 - **Real-time Interaction**: Send and receive messages instantly for a smooth and engaging chat experience
   
- ### How It Works Assiste AI leverages the Flet framework for its development and includes several key components: 
+ ### How It Works Flet AI leverages the Flet framework for its development and includes several key components: 
  
 Dynamic Tab Management: Tabs are managed using global variables and event handlers, allowing smooth operations for creating, switching, and handling multiple tabs. 
 
@@ -48,11 +48,11 @@ Chatting with the AI: Type your messages in the input box at the bottom of the s
 Managing Tabs: Use the "Add Tab" button to create new tabs. Navigate between tabs by clicking on their respective buttons at the top of the interface. This feature allows you to explore different functionalities and manage tasks effectively. 
 
 ### Contribution
-We welcome contributions to improve Assiste AI! If you have suggestions, improvements, or new features in mind, please open an issue or submit a pull request. Your feedback and contributions are vital for enhancing the functionality and user experience of Assiste AI. 
+We welcome contributions to improve Assiste AI! If you have suggestions, improvements, or new features in mind, please open an issue or submit a pull request. Your feedback and contributions are vital for enhancing the functionality and user experience of Flet AI. 
 
 ### License 
 This project is licensed under the MIT License. You can review the terms and conditions in the [LICENSE](LICENSE) file. 
 
 ### Acknowledgments 
-Thank you for exploring Assiste AI! We hope you find it as enjoyable and useful as we do. For more information and to explore the source code, visit the project repository.
+Thank you for exploring Flet AI! We hope you find it as enjoyable and useful as we do. For more information and to explore the source code, visit the project repository.
 🌟 We look forward to your feedback and contributions. Happy chatting! 💬🚀
